@@ -6,7 +6,6 @@
 
 import java.util.ArrayList;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -59,7 +58,7 @@ public class PlannerProto2 {
    }
    
    private ArrayList<Part> loadFile(String filename) throws IOException {
-      ArrayList<Part> items = new ArrayList<Part>();
+      ArrayList<Part> newItems = new ArrayList<>();
       
       BufferedReader br = new BufferedReader(new FileReader(new File(filename)));
       
@@ -67,17 +66,17 @@ public class PlannerProto2 {
       while((line = br.readLine()) != null) {
          //println(line);
          if(line.length() > 0 && line.charAt(0) != '#') {
-            items.add(parseLine(line, items));
+            newItems.add(parseLine(line, newItems));
          }
       }
       
-      return items;
+      return newItems;
    }
 //===SIMPLE TRAVERSE===
    private void simpleTraverse(ArrayList<Part> items) {
-      for(Part p : items) {
-         simplePartPrint(p);
-      }
+       items.forEach((p) -> {
+           simplePartPrint(p);
+       });
    }
 //===SIMPLE PART PRINT===
    private void simplePartPrint(Part p) {
@@ -170,7 +169,7 @@ public class PlannerProto2 {
    }
    
 //===PART CLASS===
-   private class Part {
+   public class Part {
 //===VARIABLES===
       String name;
       Part[] subParts;
@@ -188,6 +187,7 @@ public class PlannerProto2 {
          this.min = min;
       }
 //===TOSTRING===
+      @Override
       public String toString() {
          return name;
       }
