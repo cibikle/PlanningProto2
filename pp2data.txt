@@ -1,0 +1,16 @@
+#pp2data.txt
+#data for PlannerProto2
+#Christian Bikle
+
+Log
+Plank>Log=0.25/4
+Stick>Plank=0.5/4
+Redstone
+TinIngot
+TinPlate>TinIngot=1/1
+TinItemCasing>TinPlate=0.5/2
+TinCable>TinPlate=0.3/3
+Rubber
+InsulatedTinCable>Rubber=1&TinCable=1/1
+ReBattery>Redstone=2&TinItemCasing=4&InsulatedTinCable=1/1
+BatBox>Plank=5&ReBattery=3&InsulatedTinCable=1/1
