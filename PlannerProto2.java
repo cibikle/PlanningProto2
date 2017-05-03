@@ -82,10 +82,9 @@ public class PlannerProto2 {
    private void simplePartPrint(Part p) {
       println(p.getName()+" ("+p.getMin()+"):");
       if(p.getSubParts() != null) {
-         Part[] subParts = p.getSubParts();
-         double[] numSubParts = p.getNumSubParts();
-         for(int i = 0; i < numSubParts.length; i++) {
-            println(" "+subParts[i].getName()+" x "+(int)numSubParts[i]);
+         Subpart[] subParts = p.getSubParts();
+         for (Subpart subPart : subParts) {
+            println(" " + subPart.getPart().getName() + " x " + (int) subPart.getNumOfPart());
          }
       } else {
          println(" null");
@@ -104,11 +103,12 @@ public class PlannerProto2 {
       }
       println(p.getName()+" ("+n+"):");
       if(p.getSubParts() != null) {
-         Part[] subParts = p.getSubParts();
-         double[] numSubParts = p.getNumSubParts();
-         for(int i = 0; i < numSubParts.length; i++) {
-            //double sn = numSubParts[i] * n 
-            println(" "+subParts[i].getName()+" x "+(min*numSubParts[i]+actualN));//<<<fix this
+         
+         Subpart[] subParts = p.getSubParts();
+         
+         for (Subpart subPart : subParts) {
+            //double sn = numSubParts[i] * n
+            println(" " + subPart.getPart().getName() + " x " + (min * subPart.getNumOfPart() + actualN)); //<<<fix this
          }
       } else {
          println(" null");
@@ -127,15 +127,15 @@ public class PlannerProto2 {
          p.setMin(Integer.parseInt(minEtc[1]));
          String[] subPartsAndNums = minEtc[0].split(AND);
          // TODO: implement OR
-         Part[] subParts = new Part[subPartsAndNums.length];
-         double[] numSubParts = new double[subPartsAndNums.length];
+         
+         Subpart[] subParts = new Subpart[subPartsAndNums.length];
+         
          for(int i = 0; i < subPartsAndNums.length; i++) {
             String[] subPartAndNum = subPartsAndNums[i].split(NUM);
-            subParts[i] = lookupPart(subPartAndNum[0], items);
-            numSubParts[i] = Double.parseDouble(subPartAndNum[1]);
+            subParts[i].setPart(lookupPart(subPartAndNum[0], items));
+           subParts[i].setNumOfPart(Double.parseDouble(subPartAndNum[1]));
          }
          p.setSubParts(subParts);
-         p.setNumSubParts(numSubParts);
       }
       
       return p;
@@ -172,18 +172,16 @@ public class PlannerProto2 {
    public class Part {
 //===VARIABLES===
       String name;
-      Part[] subParts;
-      double[] numSubParts;
+      Subpart[] subParts;
       int min;
 //===CONSTRUCTORS===
       public Part() {
          
       }
       
-      public Part(String name, Part[] subParts, double[] numSubParts, int min) {
+      public Part(String name, Subpart[] subParts, int min) {
          this.name = name;
          this.subParts = subParts;
-         this.numSubParts = numSubParts;
          this.min = min;
       }
 //===TOSTRING===
@@ -195,15 +193,9 @@ public class PlannerProto2 {
       public String getName() {
          return name;
       }
-      
-      public Part[] getSubParts() {
+      public Subpart[] getSubParts() {
          return subParts;
       }
-      
-      public double[] getNumSubParts() {
-         return numSubParts;
-      }
-      
       public int getMin() {
          return min;
       }
@@ -211,17 +203,46 @@ public class PlannerProto2 {
       public void setName(String name) {
          this.name = name;
       }
-      
-      public void setSubParts(Part[] subParts) {
+      public void setSubParts(Subpart[] subParts) {
          this.subParts = subParts;
       }
-      
-      public void setNumSubParts(double[] numSubParts) {
-         this.numSubParts = numSubParts;
-      }
-      
       public void setMin(int min) {
          this.min = min;
+      }
+   }
+
+//===SUBPART CLASS===
+   public class Subpart {
+//===VARIABLES===
+      Part p;
+      double numOfPart;
+//===CONSTRUCTORS===
+      public Subpart() {
+
+      }
+
+      public Subpart(Part p, double n) {
+         this.p = p;
+         this.numOfPart = n;
+      }
+//===GETTERS===
+      public Part getPart() {
+         return p;
+      }
+      public double getNumOfPart() {
+         return numOfPart;
+      }
+//===SETTERS===
+      public void setPart(Part p) {
+         this.p = p;
+      }
+      public void setNumOfPart(double n) {
+         this.numOfPart = n;
+      }
+//===TOSTRING===
+      @Override
+      public String toString() {
+         return p.getName();
       }
    }
 }
