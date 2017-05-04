@@ -96,7 +96,7 @@ public class PlannerProto2 {
       
       int min = p.getMin();
       if(n > min) {
-         actualN = n / (min+1);
+         actualN = (int) Math.ceil((double)n / (double)(min+1));
          println(actualN+"");
       } else {
          actualN = 0;
@@ -132,8 +132,7 @@ public class PlannerProto2 {
          
          for(int i = 0; i < subPartsAndNums.length; i++) {
             String[] subPartAndNum = subPartsAndNums[i].split(NUM);
-            subParts[i].setPart(lookupPart(subPartAndNum[0], items));
-           subParts[i].setNumOfPart(Double.parseDouble(subPartAndNum[1]));
+            subParts[i] = new Subpart(lookupPart(subPartAndNum[0], items), Double.parseDouble(subPartAndNum[1]));
          }
          p.setSubParts(subParts);
       }
